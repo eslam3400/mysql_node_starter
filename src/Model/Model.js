@@ -142,4 +142,6 @@ class Model {
 //   email: "updated"
 // }, "id = 0")
 
+// new Model('users').get({ where: "req.cookies.token" }, data => console.log(data[0].id))
+
 module.exports = Model;
