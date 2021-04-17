@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    <title>Login</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container-fluid">
+        <span class="navbar-brand m-auto h1">Ejadah</span>
+      </div>
+    </nav>
+    <section class="mt-5 pt-5 mb-5 pb-5">
+      <form method="post" action="/signup" class="m-auto w-50 pt-5">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputEmail4">Email</label>
+            <input
+              name="email"
+              type="email"
+              class="form-control"
+              id="inputEmail4"
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputPassword4">Password</label>
+            <input
+              name="password"
+              type="password"
+              class="form-control"
+              id="inputPassword4"
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputAddress">Address</label>
+          <input
+            name="address"
+            type="text"
+            class="form-control"
+            id="inputAddress"
+            placeholder="1234 Main St"
+          />
+        </div>
+        <div class="form-group">
+          <label for="inputAddress2">Address 2</label>
+          <input
+            name="address2"
+            type="text"
+            class="form-control"
+            id="inputAddress2"
+            placeholder="Apartment, studio, or floor"
+          />
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputCity">City</label>
+            <input
+              name="city"
+              type="text"
+              class="form-control"
+              id="inputCity"
+            />
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputState">State</label>
+            <select name="state" id="inputState" class="form-control">
+              <option value="1" selected>Choose...</option>
+              <option value="....">...</option>
+            </select>
+          </div>
+          <div class="form-group col-md-2">
+            <label for="inputZip">Zip</label>
+            <input name="zip" type="text" class="form-control" id="inputZip" />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-check">
+            <input
+              name="check"
+              class="form-check-input"
+              type="checkbox"
+              id="gridCheck"
+            />
+            <label class="form-check-label" for="gridCheck">
+              Check me out
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign in</button>
+      </form>
+    </section>
+    <script src="js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

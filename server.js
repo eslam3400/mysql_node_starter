@@ -22,5 +22,9 @@ app.use(express.urlencoded())
  */
 app.use(cookie("DevTik"))
 
-app.get('/', (req, res) => { })
+app.get('/login', Controller.Auth.loginPage)
+app.post('/login', Controller.Auth.login)
+app.get('/signup', Controller.Auth.signupPage)
+app.post('/signup', Controller.Auth.signup)
+
 app.listen(process.env.PORT || port, () => console.log(`app listening at http://localhost:${port}`))
