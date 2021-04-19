@@ -16,7 +16,15 @@ class Model {
   }
 
   get(options = { limit: null, where: null, order: null }, callBack = data => { }) {
-    let { limit, where, order } = options
+    if (options != null) let { limit, where, order } = options
+    else
+      this.connection.connect(connectionErr => {
+        if (connectionErr) throw connectionErr;
+        this.connection.query(`SELECT * FROM ${this.tabelName}`, (queryErr, result) => {
+          if (queryErr) throw queryErr;
+          callBack(result)
+        });
+      });
     if (limit == null && where == null && order == null)
       this.connection.connect(connectionErr => {
         if (connectionErr) throw connectionErr;
