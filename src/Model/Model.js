@@ -1,10 +1,18 @@
 const db = require('mysql');
 
 class Model {
-
+  /**
+   * tabel name that we work on fetch data or send data
+   */
   tabelName = null;
+  /**
+   * connection object to communicate with the database with it
+   */
   connection = null;
-
+  /**
+   * define the table name in the creation of the object and make a connection to the database
+   * and save it to a connection variable to communicate with the database
+  */
   constructor(tabelName) {
     this.tabelName = tabelName;
     this.connection = db.createConnection({
@@ -14,73 +22,48 @@ class Model {
       database: 'devtik_ms'
     })
   }
+  /**
+   * 
+   * @param {*} callBack => take a function definetion to be excuted at the time the sql statement is excuted
+   *                        it provided with a param that hold the data of the the sql statement excuted before
+   *                        so we can handle it at the function definetion to do some operations on this sql result
+   * @param {*} options => take a object that contains 3 constrains and do some operations depending on the statue
+   *                       of this constrains
+   *                       limit => limit the returned data of a query to provided number
+   *                       where => make a conditional query depending on what is provided to this where
+   *                       order => is an object that has a {by,type} keys and ordring the query result in this order
+   * 
+   * this function get data from initalized table name provided depending on passed options
+   */
+  get(callBack = data => { }, options = { limit: null, where: null, order: null }) {
 
-  get(options = { limit: null, where: null, order: null }, callBack = data => { }) {
-    if (options != null) let { limit, where, order } = options
-    else
-      this.connection.connect(connectionErr => {
-        if (connectionErr) throw connectionErr;
-        this.connection.query(`SELECT * FROM ${this.tabelName}`, (queryErr, result) => {
-          if (queryErr) throw queryErr;
-          callBack(result)
-        });
+    let { limit, where, order } = options
+    let sqlStatment
+
+    if (options == null)
+      sqlStatment = `SELECT * FROM ${this.tabelName}`
+    else if (limit == null && where == null && order == null)
+      sqlStatment = `SELECT * FROM ${this.tabelName}`
+    else if (limit != null && limit > 0 && where == null && order == null)
+      sqlStatment = `SELECT * FROM ${this.tabelName} LIMIT ${limit}`
+    else if (limit != null && limit > 0 && where != null && order == null)
+      sqlStatment = `SELECT * FROM ${this.tabelName} WHERE ${where} LIMIT ${limit}`
+    else if (limit != null && limit > 0 && where != null && order != null)
+      sqlStatment = `SELECT * FROM ${this.tabelName} WHERE ${where} ORDER BY ${order.by} ${order.type} LIMIT ${limit}`
+    else if (limit == null && where != null && order != null)
+      sqlStatment = `SELECT * FROM ${this.tabelName} WHERE ${where} ORDER BY ${order.by} ${order.type}`
+    else if (limit == null && where == null && order != null)
+      sqlStatment = `SELECT * FROM ${this.tabelName} ORDER BY ${order.by} ${order.type}`
+    else if (limit == null && where != null && order == null)
+      sqlStatment = `SELECT * FROM ${this.tabelName} WHERE ${where}`
+
+    this.connection.connect(connectionErr => {
+      if (connectionErr) throw connectionErr;
+      this.connection.query(sqlStatment, (queryErr, result) => {
+        if (queryErr) throw queryErr;
+        callBack(result)
       });
-    if (limit == null && where == null && order == null)
-      this.connection.connect(connectionErr => {
-        if (connectionErr) throw connectionErr;
-        this.connection.query(`SELECT * FROM ${this.tabelName}`, (queryErr, result) => {
-          if (queryErr) throw queryErr;
-          callBack(result)
-        });
-      });
-    if (limit != null && limit > 0 && where == null && order == null)
-      this.connection.connect(connectionErr => {
-        if (connectionErr) throw connectionErr;
-        this.connection.query(`SELECT * FROM ${this.tabelName} LIMIT ${limit}`, (queryErr, result) => {
-          if (queryErr) throw queryErr;
-          callBack(result)
-        });
-      });
-    if (limit != null && limit > 0 && where != null && order == null)
-      this.connection.connect(connectionErr => {
-        if (connectionErr) throw connectionErr;
-        this.connection.query(`SELECT * FROM ${this.tabelName} WHERE ${where} LIMIT ${limit}`, (queryErr, result) => {
-          if (queryErr) throw queryErr;
-          callBack(result)
-        });
-      });
-    if (limit != null && limit > 0 && where != null && order != null)
-      this.connection.connect(connectionErr => {
-        if (connectionErr) throw connectionErr;
-        this.connection.query(`SELECT * FROM ${this.tabelName} WHERE ${where} ORDER BY ${order.by} ${order.type} LIMIT ${limit}`, (queryErr, result) => {
-          if (queryErr) throw queryErr;
-          callBack(result)
-        });
-      });
-    if (limit == null && where != null && order != null)
-      this.connection.connect(connectionErr => {
-        if (connectionErr) throw connectionErr;
-        this.connection.query(`SELECT * FROM ${this.tabelName} WHERE ${where} ORDER BY ${order.by} ${order.type}`, (queryErr, result) => {
-          if (queryErr) throw queryErr;
-          callBack(result)
-        });
-      });
-    if (limit == null && where == null && order != null)
-      this.connection.connect(connectionErr => {
-        if (connectionErr) throw connectionErr;
-        this.connection.query(`SELECT * FROM ${this.tabelName} ORDER BY ${order.by} ${order.type}`, (queryErr, result) => {
-          if (queryErr) throw queryErr;
-          callBack(result)
-        });
-      });
-    if (limit == null && where != null && order == null)
-      this.connection.connect(connectionErr => {
-        if (connectionErr) throw connectionErr;
-        this.connection.query(`SELECT * FROM ${this.tabelName} WHERE ${where}`, (queryErr, result) => {
-          if (queryErr) throw queryErr;
-          callBack(result)
-        });
-      });
+    });
   }
 
   add(data) {
@@ -94,7 +77,7 @@ class Model {
       if (connectionErr) throw connectionErr;
       this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
         if (queryErr) throw queryErr;
-        console.log(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`)
+        // console.log(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`)
       });
     });
   }
