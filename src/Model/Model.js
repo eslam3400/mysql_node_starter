@@ -23,17 +23,16 @@ class Model {
     })
   }
   /**
-   * 
-   * @param {*} callBack => take a function definetion to be excuted at the time the sql statement is excuted
-   *                        it provided with a param that hold the data of the the sql statement excuted before
-   *                        so we can handle it at the function definetion to do some operations on this sql result
-   * @param {*} options => take a object that contains 3 constrains and do some operations depending on the statue
-   *                       of this constrains
-   *                       limit => limit the returned data of a query to provided number
-   *                       where => make a conditional query depending on what is provided to this where
-   *                       order => is an object that has a {by,type} keys and ordring the query result in this order
-   * 
    * this function get data from initalized table name provided depending on passed options
+   * 
+   * @param {*} callBack take a function definetion to be excuted at the time the sql statement is excuted
+   * it provided with a param that hold the data of the the sql statement excuted before
+   * so we can handle it at the function definetion to do some operations on this sql result
+   * @param {*} options take a object that contains 3 constrains and do some operations depending on the statue of this constrains
+   * limit => limit the returned data of a query to provided number
+   * where => make a conditional query depending on what is provided to this where
+   * order => is an object that has a {by,type} keys and ordring the query result in this order
+   * 
    */
   get(callBack = data => { }, options = { limit: null, where: null, order: null }) {
 
@@ -60,6 +59,20 @@ class Model {
     this.connection.connect(connectionErr => {
       if (connectionErr) throw connectionErr;
       this.connection.query(sqlStatment, (queryErr, result) => {
+        if (queryErr) throw queryErr;
+        callBack(result)
+      });
+    });
+  }
+  /**
+   * 
+   * @param {*} SQLQuery sql query to be excuted
+   * @param {*} callBack a function that holds the result of the query and manipulate the result
+   */
+  excute(SQLQuery, callBack = (data) => { }) {
+    this.connection.connect(connectionErr => {
+      if (connectionErr) throw connectionErr;
+      this.connection.query(SQLQuery, (queryErr, result) => {
         if (queryErr) throw queryErr;
         callBack(result)
       });
