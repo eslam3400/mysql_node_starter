@@ -3,6 +3,7 @@ const cookie = require('cookie-parser')
 const Controller = require('./src/Controller/Controller')
 const Middleware = require('./src/Middleware/Middleware')
 const path = require('path')
+const fileUpload = require('express-fileupload')
 const app = express()
 const port = 3000
 /*
@@ -22,6 +23,10 @@ app.use(express.urlencoded())
  * by using this i can access cookies data from cookies object
  */
 app.use(cookie("DevTik"))
+/**
+ * by using this i can access files data from req.files object
+ */
+app.use(fileupload())
 
 app.get('/login', Controller.Auth.loginPage)
 app.post('/login', Controller.Auth.login)

@@ -13,8 +13,7 @@ class Model {
    * define the table name in the creation of the object and make a connection to the database
    * and save it to a connection variable to communicate with the database
   */
-  constructor(tabelName) {
-    this.tabelName = tabelName;
+  constructor() {
     this.connection = db.createConnection({
       host: 'localhost',
       user: 'root',
@@ -34,14 +33,12 @@ class Model {
    * order => is an object that has a {by,type} keys and ordring the query result in this order
    * 
    */
-  get(callBack = data => { }, options = { limit: null, where: null, order: null }) {
+  get(options = { limit: null, where: null, order: null }) {
 
     let { limit, where, order } = options
     let sqlStatment
 
-    if (options == null)
-      sqlStatment = `SELECT * FROM ${this.tabelName}`
-    else if (limit == null && where == null && order == null)
+    if (limit == null && where == null && order == null)
       sqlStatment = `SELECT * FROM ${this.tabelName}`
     else if (limit != null && limit > 0 && where == null && order == null)
       sqlStatment = `SELECT * FROM ${this.tabelName} LIMIT ${limit}`
@@ -56,27 +53,31 @@ class Model {
     else if (limit == null && where != null && order == null)
       sqlStatment = `SELECT * FROM ${this.tabelName} WHERE ${where}`
 
-    this.connection.connect(connectionErr => {
-      if (connectionErr) throw connectionErr;
-      this.connection.query(sqlStatment, (queryErr, result) => {
-        if (queryErr) throw queryErr;
-        callBack(result)
+    return new Promise((resolve, reject) => {
+      this.connection.connect(connectionErr => {
+        if (connectionErr) throw connectionErr;
+        this.connection.query(sqlStatment, (queryErr, result) => {
+          if (queryErr) throw queryErr;
+          resolve(result)
+        });
       });
-    });
+    })
   }
   /**
    * 
    * @param {*} SQLQuery sql query to be excuted
    * @param {*} callBack a function that holds the result of the query and manipulate the result
    */
-  excute(SQLQuery, callBack = (data) => { }) {
-    this.connection.connect(connectionErr => {
-      if (connectionErr) throw connectionErr;
-      this.connection.query(SQLQuery, (queryErr, result) => {
-        if (queryErr) throw queryErr;
-        callBack(result)
+  excute(SQLQuery) {
+    return new Promise((resolve, reject) => {
+      this.connection.connect(connectionErr => {
+        if (connectionErr) throw connectionErr;
+        this.connection.query(SQLQuery, (queryErr, result) => {
+          if (queryErr) throw queryErr;
+          resolve(result)
+        });
       });
-    });
+    })
   }
 
   add(data) {
@@ -86,22 +87,27 @@ class Model {
       cols.push(key)
       values.push(data[key])
     }
-    this.connection.connect(connectionErr => {
-      if (connectionErr) throw connectionErr;
-      this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
-        if (queryErr) throw queryErr;
-        // console.log(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`)
+    return new Promise((resolve, reject) => {
+      this.connection.connect(connectionErr => {
+        if (connectionErr) throw connectionErr;
+        this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
+          if (queryErr) throw queryErr;
+          resolve("data added")
+        });
       });
-    });
+    })
   }
 
   delete(where) {
-    this.connection.connect(connectionErr => {
-      if (connectionErr) throw connectionErr;
-      this.connection.query(`DELETE FROM ${this.tabelName} ${where}`, (queryErr) => {
-        if (queryErr) throw queryErr;
+    return new Promise((resolve, reject) => {
+      this.connection.connect(connectionErr => {
+        if (connectionErr) throw connectionErr;
+        this.connection.query(`DELETE FROM ${this.tabelName} ${where}`, (queryErr) => {
+          if (queryErr) throw queryErr;
+          resolve("data deleted")
+        });
       });
-    });
+    })
   }
 
   update(data, where) {
@@ -111,41 +117,27 @@ class Model {
       cols.push(key)
       values.push(data[key])
     }
-    this.connection.connect(connectionErr => {
-      if (connectionErr) throw connectionErr;
-      let sql = `UPDATE ${this.tabelName} SET`
-      let final = cols.length - 1
-      let counter = 0
-      cols.forEach(col => {
-        if (counter == final)
-          sql += ` ${col} = '${values[counter]}'`
-        else
-          sql += ` ${col} = '${values[counter]}',`
-        counter++
-      });
-      sql += ` WHERE ${where}`
-      this.connection.query(sql, (queryErr) => {
-        if (queryErr) throw queryErr;
-        console.log(sql)
-      });
+    let sql = `UPDATE ${this.tabelName} SET`
+    let final = cols.length - 1
+    let counter = 0
+    cols.forEach(col => {
+      if (counter == final)
+        sql += ` ${col} = '${values[counter]}'`
+      else
+        sql += ` ${col} = '${values[counter]}',`
+      counter++
     });
+    sql += ` WHERE ${where}`
+    return new Promise((resolve, reject) => {
+      this.connection.connect(connectionErr => {
+        if (connectionErr) throw connectionErr;
+        this.connection.query(sql, (queryErr) => {
+          if (queryErr) throw queryErr;
+          resolve("data updated")
+        });
+      });
+    })
   }
 }
-
-// new Model("users").add({
-//   id: 1,
-//   fname: "eslam",
-//   lname: "magdy",
-//   email: "eslam3400@gmail.com"
-// })
-
-// new Model("users").update({
-//   id: 2,
-//   fname: "updated",
-//   lname: "updated",
-//   email: "updated"
-// }, "id = 0")
-
-// new Model('users').get({ where: "req.cookies.token" }, data => console.log(data[0].id))
 
 module.exports = Model;

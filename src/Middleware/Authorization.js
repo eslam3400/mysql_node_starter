@@ -1,10 +1,9 @@
-const Model = require('../Model/Model')
+const UserModel = require('../Model/User')
 
-let admin = (req, res, next) => {
-  new Model('users').get(data => {
-    if (data.length > 0 && data[0].role == 'admin') next()
-    else res.render('login', { message: "accessError" })
-  }, { where: `id = ${req.cookies.token}` })
+let admin = async (req, res, next) => {
+  let users = await new UserModel().get({ where: `id = ${req.cookies.token}` })
+  if (users.length > 0 && users[0].role == 'admin') next()
+  else res.render('login', { message: "accessError" })
 }
 
 module.exports = { admin }
