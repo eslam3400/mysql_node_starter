@@ -1,7 +1,7 @@
 let { uploadPath } = require('../../uploadPath')
 const uuid = require('uuid').v4
 
-class Upload {
+class Utility {
   async upload(file) {
     let fileExtention = file.mimetype
     fileExtention = fileExtention.slice(fileExtention.indexOf("/") + 1)
