@@ -24,9 +24,6 @@ class Model {
   /**
    * this function get data from initalized table name provided depending on passed options
    * 
-   * @param {*} callBack take a function definetion to be excuted at the time the sql statement is excuted
-   * it provided with a param that hold the data of the the sql statement excuted before
-   * so we can handle it at the function definetion to do some operations on this sql result
    * @param {*} options take a object that contains 3 constrains and do some operations depending on the statue of this constrains
    * limit => limit the returned data of a query to provided number
    * where => make a conditional query depending on what is provided to this where
@@ -38,7 +35,9 @@ class Model {
     let { limit, where, order } = options
     let sqlStatment
 
-    if (limit == null && where == null && order == null)
+    if (options == null)
+      sqlStatment = `SELECT * FROM ${this.tabelName}`
+    else if (limit == null && where == null && order == null)
       sqlStatment = `SELECT * FROM ${this.tabelName}`
     else if (limit != null && limit > 0 && where == null && order == null)
       sqlStatment = `SELECT * FROM ${this.tabelName} LIMIT ${limit}`
@@ -80,22 +79,45 @@ class Model {
     })
   }
 
-  add(data) {
+  async add(data, options = { unique: [{ key: null, value: null }] }) {
     let cols = []
     let values = []
     for (const key in data) {
       cols.push(key)
       values.push(data[key])
     }
-    return new Promise((resolve, reject) => {
-      this.connection.connect(connectionErr => {
-        if (connectionErr) throw connectionErr;
-        this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
-          if (queryErr) throw queryErr;
-          resolve("data added")
-        });
+    let { unique } = options
+    if (unique[0].key != null) {
+      let uniqueValues = ``
+      let counter = 0
+      unique.forEach(element => {
+        if (counter == unique.length - 1)
+          uniqueValues += `${element.key} = ${element.value}`
+        else
+          uniqueValues += `${element.key} = ${element.value} OR `
       });
-    })
+      let checkData = await this.get({ where: uniqueValues })
+      if (checkData.length == 0)
+        return new Promise((resolve, reject) => {
+          this.connection.connect(connectionErr => {
+            if (connectionErr) throw connectionErr;
+            this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
+              if (queryErr) throw queryErr;
+              resolve(0)
+            });
+          });
+        })
+    }
+    else
+      return new Promise((resolve, reject) => {
+        this.connection.connect(connectionErr => {
+          if (connectionErr) throw connectionErr;
+          this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
+            if (queryErr) throw queryErr;
+            resolve(0)
+          });
+        });
+      })
   }
 
   delete(where) {

@@ -1,9 +1,9 @@
+const path = require('path')
 const express = require('express')
 const cookie = require('cookie-parser')
-const Controller = require('./src/Controller/Controller')
-const Middleware = require('./src/Middleware/Middleware')
-const path = require('path')
 const fileUpload = require('express-fileupload')
+const WebRouter = require("./src/Routes/Web/Router")
+const APIRouter = require("./src/Routes/API/Router")
 const app = express()
 const port = 3000
 /*
@@ -27,10 +27,10 @@ app.use(cookie("DevTik"))
  * by using this i can access files data from req.files object
  */
 app.use(fileupload())
-
-app.get('/login', Controller.Auth.loginPage)
-app.post('/login', Controller.Auth.login)
-app.get('/signup', Controller.Auth.signupPage)
-app.post('/signup', Controller.Auth.signup)
+/**
+ * Routers
+ */
+app.use("/API/", APIRouter)
+app.use("/", WebRouter)
 
 app.listen(process.env.PORT || port, () => console.log(`app listening at http://localhost:${port}`))
