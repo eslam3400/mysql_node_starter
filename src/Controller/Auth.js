@@ -1,12 +1,12 @@
 const UserModel = require('../Model/User')
 const { createToken } = require('../Utilities/Utility')
 
-let loginPage = (req, res) => res.render('login', { message: "" })
+let loginPage = (req, res) => res.render('login', { msg: "" })
 
 let login = async (req, res) => {
   let users = await new UserModel().get({ where: `email = '${req.body.email}' AND password = '${req.body.password}'` })
-  if (users.length == 1) res.cookie('token', createToken(users[0].id), { maxAge: 28800000 }).redirect('/') // 8 hourse
-  else res.render('login', { message: "loginError" })
+  if (users.length == 1) return res.cookie('token', createToken(users[0].id)).redirect('/') // 8 hourse
+  else return res.render('login', { msg: "loginError" })
 }
 
 let signupPage = (req, res) => res.render('signup')

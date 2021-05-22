@@ -107,6 +107,7 @@ class Model {
             });
           });
         })
+      else return `some information is already used before`
     }
     else
       return new Promise((resolve, reject) => {

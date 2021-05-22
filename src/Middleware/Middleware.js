@@ -1,4 +1,3 @@
-const Authentication = require('./Authentication')
-const Authorization = require('./Authorization')
+const Auth = require('./Authorization')
 
-module.exports = { Authentication, Authorization }
+module.exports = { Auth }

@@ -1,10 +1,15 @@
 const UserModel = require('../Model/User')
 const { verifyToken } = require('../Utilities/Utility')
 
-let admin = async (req, res, next) => {
-  let users = await new UserModel().get({ where: `id = ${verifyToken(req.cookies.token)}` })
-  if (users.length > 0 && users[0].role == 'admin') next()
-  else res.render('login', { message: "accessError" })
+let auth = (req, res, next) => {
+  if (req.cookies.token == undefined || req.cookies.token == null) return res.render('login', { msg: "authError" })
+  else next()
 }
 
-module.exports = { admin }
+let admin = async (req, res, next) => {
+  let users = await new UserModel().get({ where: `id = ${verifyToken(req.cookies.token)}` })
+  if (users.length == 1 && users[0].role == 'admin') return next()
+  else return res.render('login', { msg: "accessError" })
+}
+
+module.exports = { admin, auth }
