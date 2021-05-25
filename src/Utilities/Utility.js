@@ -11,7 +11,7 @@ let uploadFile = async file => {
     uploadPath += file.name
     return new Promise((resolve, reject) => {
       file.mv(uploadPath, err => {
-        if (err) return res.send(err)
+        if (err) resolve(null)
         else resolve(file.name)
       })
     })
