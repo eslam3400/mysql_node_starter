@@ -15,15 +15,15 @@
     </nav>
     <section class="mt-5 pt-5 mb-5 pb-5">
       <form action="/login" method="POST" class="m-auto w-50 pt-5">
-        <% if (message == "loginError") { %>
+        <% if (msg == "loginError") { %>
         <div class="alert alert-danger" role="alert">
           Email Or Password Are Inccorect Please Try Again With Valid Data
         </div>
-        <% } %> <% if (message == "authError") { %>
+        <% } %> <% if (msg == "authError") { %>
         <div class="alert alert-danger" role="alert">
           You Have To Login First To Access This Page
         </div>
-        <% } %> <% if (message == "accessError") { %>
+        <% } %> <% if (msg == "accessError") { %>
         <div class="alert alert-danger" role="alert">
           You Don't Have The Permission To Access This Page
         </div>

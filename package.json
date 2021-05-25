@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "serve": "nodemon serve.js",
-    "db": "node ./src/DB/db.js",
+    "buildDB": "node ./src/DB/DBStructure.js",
     "test": "node ./src/Test/test.js"
   },
   "keywords": [],

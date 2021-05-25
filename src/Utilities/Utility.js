@@ -1,7 +1,7 @@
 let { uploadPath } = require('../../uploadPath')
 const uuid = require('uuid').v4
 const jwt = require('jsonwebtoken')
-const TOKEN_SECRET = ''; // require('crypto').randomBytes(64).toString('hex')
+const TOKEN_SECRET = 'devtik'; // require('crypto').randomBytes(64).toString('hex')
 
 let uploadFile = async file => {
   if (file) {

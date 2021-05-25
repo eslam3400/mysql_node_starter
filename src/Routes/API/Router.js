@@ -1,4 +1,5 @@
 const APIController = require("../../Controller/API/Controller");
+const APIMiddleware = require("../../Middleware/API/Middleware");
 var express = require('express')
 var router = express.Router()
 
@@ -10,6 +11,6 @@ router.post("/signup", APIController.Auth.signup);
 /**
  * User
  */
-router.get("/user", APIController.User.user);
+router.get("/user", APIMiddleware.Auth.auth, APIController.Auth.userData);
 
 module.exports = router

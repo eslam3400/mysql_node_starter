@@ -11,7 +11,11 @@ let login = async (req, res) => {
 
 let signupPage = (req, res) => res.render('signup')
 
-let signup = (req, res) => new UserModel.add(req.body)
+let signup = async (req, res) => {
+  let msg = await new UserModel().add(req.body, { unique: [{ key: 'email', value: `${req.body.email}` }] })
+  if (msg == 0) return res.redirect('/login')
+  else return res.redirect('/signup')
+}
 
 let logout = (req, res) => res.clearCookie('token').redirect('/')
 

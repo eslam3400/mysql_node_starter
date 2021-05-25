@@ -10,16 +10,21 @@ class Model {
    */
   connection = null;
   /**
-   * define the table name in the creation of the object and make a connection to the database
-   * and save it to a connection variable to communicate with the database
+   * make a connection to the database and save it to a connection variable to communicate with the database
   */
-  constructor() {
+  connect() {
     this.connection = db.createConnection({
       host: 'localhost',
       user: 'root',
       password: '',
       database: 'devtik_ms'
     })
+  }
+  /**
+   * make a disconnection with the database
+   */
+  disconnect() {
+    this.connection.destroy()
   }
   /**
    * this function get data from initalized table name provided depending on passed options
@@ -53,29 +58,40 @@ class Model {
       sqlStatment = `SELECT * FROM ${this.tabelName} WHERE ${where}`
 
     return new Promise((resolve, reject) => {
-      this.connection.connect(connectionErr => {
-        if (connectionErr) throw connectionErr;
-        this.connection.query(sqlStatment, (queryErr, result) => {
-          if (queryErr) throw queryErr;
-          resolve(result)
+      try {
+        this.connect()
+        this.connection.connect(connectionErr => {
+          if (connectionErr) throw connectionErr;
+          this.connection.query(sqlStatment, (queryErr, result) => {
+            this.disconnect()
+            if (queryErr) throw queryErr;
+            resolve(result)
+          });
         });
-      });
+      } catch (error) {
+        console.log(error)
+      }
     })
   }
   /**
    * 
    * @param {*} SQLQuery sql query to be excuted
-   * @param {*} callBack a function that holds the result of the query and manipulate the result
    */
   excute(SQLQuery) {
     return new Promise((resolve, reject) => {
-      this.connection.connect(connectionErr => {
-        if (connectionErr) throw connectionErr;
-        this.connection.query(SQLQuery, (queryErr, result) => {
-          if (queryErr) throw queryErr;
-          resolve(result)
+      try {
+        this.connect()
+        this.connection.connect(connectionErr => {
+          if (connectionErr) throw connectionErr;
+          this.connection.query(SQLQuery, (queryErr, result) => {
+            this.disconnect()
+            if (queryErr) throw queryErr;
+            resolve(result)
+          });
         });
-      });
+      } catch (error) {
+        console.log(error)
+      }
     })
   }
 
@@ -92,44 +108,63 @@ class Model {
       let counter = 0
       unique.forEach(element => {
         if (counter == unique.length - 1)
-          uniqueValues += `${element.key} = ${element.value}`
+          uniqueValues += `${element.key} = '${element.value}'`
         else
-          uniqueValues += `${element.key} = ${element.value} OR `
+          uniqueValues += `${element.key} = '${element.value}' OR `
+        counter++
       });
       let checkData = await this.get({ where: uniqueValues })
       if (checkData.length == 0)
         return new Promise((resolve, reject) => {
-          this.connection.connect(connectionErr => {
-            if (connectionErr) throw connectionErr;
-            this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
-              if (queryErr) throw queryErr;
-              resolve(0)
+          try {
+            this.connect()
+            this.connection.connect(connectionErr => {
+              if (connectionErr) throw connectionErr;
+              this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
+                this.disconnect()
+                if (queryErr) throw queryErr;
+                resolve(0)
+              });
             });
-          });
+          } catch (error) {
+            console.log(error)
+          }
         })
       else return `some information is already used before`
     }
     else
       return new Promise((resolve, reject) => {
-        this.connection.connect(connectionErr => {
-          if (connectionErr) throw connectionErr;
-          this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
-            if (queryErr) throw queryErr;
-            resolve(0)
+        try {
+          this.connect()
+          this.connection.connect(connectionErr => {
+            if (connectionErr) throw connectionErr;
+            this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
+              this.disconnect()
+              if (queryErr) throw queryErr;
+              resolve(0)
+            });
           });
-        });
+        } catch (error) {
+          console.log(error)
+        }
       })
   }
 
   delete(where) {
     return new Promise((resolve, reject) => {
-      this.connection.connect(connectionErr => {
-        if (connectionErr) throw connectionErr;
-        this.connection.query(`DELETE FROM ${this.tabelName} ${where}`, (queryErr) => {
-          if (queryErr) throw queryErr;
-          resolve("data deleted")
+      try {
+        this.connect()
+        this.connection.connect(connectionErr => {
+          if (connectionErr) throw connectionErr;
+          this.connection.query(`DELETE FROM ${this.tabelName} ${where}`, (queryErr) => {
+            this.disconnect()
+            if (queryErr) throw queryErr;
+            resolve("Deleted")
+          });
         });
-      });
+      } catch (error) {
+        console.log(error)
+      }
     })
   }
 
@@ -152,13 +187,19 @@ class Model {
     });
     sql += ` WHERE ${where}`
     return new Promise((resolve, reject) => {
-      this.connection.connect(connectionErr => {
-        if (connectionErr) throw connectionErr;
-        this.connection.query(sql, (queryErr) => {
-          if (queryErr) throw queryErr;
-          resolve("data updated")
+      try {
+        this.connect()
+        this.connection.connect(connectionErr => {
+          if (connectionErr) throw connectionErr;
+          this.connection.query(sql, (queryErr) => {
+            this.disconnect()
+            if (queryErr) throw queryErr;
+            resolve("Updated")
+          });
         });
-      });
+      } catch (error) {
+        console.log(error)
+      }
     })
   }
 }

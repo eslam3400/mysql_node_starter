@@ -1,7 +1,7 @@
 const path = require('path')
 const express = require('express')
 const cookie = require('cookie-parser')
-const fileUpload = require('express-fileupload')
+const fileUpload = require("express-fileupload");
 const WebRouter = require("./src/Routes/Web/Router")
 const APIRouter = require("./src/Routes/API/Router")
 const app = express()
@@ -26,7 +26,7 @@ app.use(cookie("DevTik"))
 /**
  * by using this i can access files data from req.files object
  */
-app.use(fileupload())
+app.use(fileUpload())
 /**
  * Routers
  */
