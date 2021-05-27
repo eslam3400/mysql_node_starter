@@ -156,7 +156,7 @@ class Model {
         this.connect()
         this.connection.connect(connectionErr => {
           if (connectionErr) throw connectionErr;
-          this.connection.query(`DELETE FROM ${this.tabelName} ${where}`, (queryErr) => {
+          this.connection.query(`DELETE FROM ${this.tabelName} WHERE ${where}`, (queryErr) => {
             this.disconnect()
             if (queryErr) throw queryErr;
             resolve("Deleted")
