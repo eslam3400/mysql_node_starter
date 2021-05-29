@@ -1,25 +1,112 @@
 const db = require('mysql');
 
-class Model {
+const DB = {
   /**
-   * tabel name that we work on fetch data or send data
-   */
-  tabelName = null;
-  /**
-   * connection object to communicate with the database with it
-   */
-  connection = null;
-  /**
-   * make a connection to the database and save it to a connection variable to communicate with the database
+  * tabel name that we work on to fetch or send data
   */
-  connect() {
-    this.connection = db.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'devtik_ms'
-    })
+  tableName: null,
+  /**
+   * a variable hold connection to communicate with the database
+  */
+  connection: null,
+  config(options = { host: null, user: null, password: null, database: null }) {
+    let { host, user, password, database } = options
+    if (host == undefined || user == undefined || password == undefined || database == undefined)
+      return console.error("Please make sure to provide all required options [host,username,password,database]")
+    else
+      this.connection = db.createConnection({ host, user, password, database })
+  },
+  target(tableName) {
+    console.log(tableName)
+    this.tableName = tableName
+  },
+  excute(sqlStatment) {
+    if (this.tableName == null || this.tableName == undefined)
+      return console.error("please make sure to use target() providing the tabel name as a parameter")
+    else
+      return new Promise((resolve, reject) => {
+        this.connection.query(sqlStatment, (queryErr, result) => {
+          if (queryErr) {
+            console.error('error: ' + queryErr.message)
+            reject(queryErr)
+          } else resolve(result)
+        })
+      })
+  },
+  get(options = { limit: null, where: null, order: null }) {
+    let { limit, where, order } = options
+    let sqlStatment
+
+    if (limit == null && where == null && order == null)
+      sqlStatment = `SELECT * FROM ${this.tableName}`
+    else if (limit != null && limit > 0 && where == null && order == null)
+      sqlStatment = `SELECT * FROM ${this.tableName} LIMIT ${limit}`
+    else if (limit != null && limit > 0 && where != null && order == null)
+      sqlStatment = `SELECT * FROM ${this.tableName} WHERE ${where} LIMIT ${limit}`
+    else if (limit != null && limit > 0 && where != null && order != null)
+      sqlStatment = `SELECT * FROM ${this.tableName} WHERE ${where} ORDER BY ${order.by} ${order.type} LIMIT ${limit}`
+    else if (limit == null && where != null && order != null)
+      sqlStatment = `SELECT * FROM ${this.tableName} WHERE ${where} ORDER BY ${order.by} ${order.type}`
+    else if (limit == null && where == null && order != null)
+      sqlStatment = `SELECT * FROM ${this.tableName} ORDER BY ${order.by} ${order.type}`
+    else if (limit == null && where != null && order == null)
+      sqlStatment = `SELECT * FROM ${this.tableName} WHERE ${where}`
+
+    return this.excute(sqlStatment)
+  },
+  async add(data, unique = [null]) {
+    let cols = []
+    let values = []
+    for (const key in data) {
+      cols.push(key)
+      values.push(data[key])
+    }
+    if (unique[0] != null) {
+      let uniqueValues = ``
+      let counter = 0
+      unique.forEach(element => {
+        if (counter == unique.length - 1)
+          uniqueValues += `${element} = '${data[element]}'`
+        else
+          uniqueValues += `${element} = '${data[element]}' OR `
+        counter++
+      });
+      let checkData = await this.get({ where: uniqueValues })
+      if (checkData.length == 0)
+        return this.excute(`INSERT INTO ${this.tableName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`)
+      else {
+        console.log(`some information is already used before`)
+        return null
+      }
+    }
+    else
+      return this.excute(`INSERT INTO ${this.tableName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`)
+  },
+  delete(where) {
+    return this.excute(`DELETE FROM ${this.tableName} WHERE ${where}`)
+  },
+  update(data, where) {
+    let cols = []
+    let values = []
+    for (const key in data) {
+      cols.push(key)
+      values.push(data[key])
+    }
+    let sqlStatment = `UPDATE ${this.tableName} SET`
+    let final = cols.length - 1
+    let counter = 0
+    cols.forEach(col => {
+      if (counter == final)
+        sqlStatment += ` ${col} = '${values[counter]}'`
+      else
+        sqlStatment += ` ${col} = '${values[counter]}',`
+      counter++
+    });
+    sqlStatment += ` WHERE ${where}`
+    return this.excute(sqlStatment)
   }
+}
+class Model {
   /**
    * make a disconnection with the database
    */
@@ -41,21 +128,21 @@ class Model {
     let sqlStatment
 
     if (options == null)
-      sqlStatment = `SELECT * FROM ${this.tabelName}`
+      sqlStatment = `SELECT * FROM ${this.tableName}`
     else if (limit == null && where == null && order == null)
-      sqlStatment = `SELECT * FROM ${this.tabelName}`
+      sqlStatment = `SELECT * FROM ${this.tableName}`
     else if (limit != null && limit > 0 && where == null && order == null)
-      sqlStatment = `SELECT * FROM ${this.tabelName} LIMIT ${limit}`
+      sqlStatment = `SELECT * FROM ${this.tableName} LIMIT ${limit}`
     else if (limit != null && limit > 0 && where != null && order == null)
-      sqlStatment = `SELECT * FROM ${this.tabelName} WHERE ${where} LIMIT ${limit}`
+      sqlStatment = `SELECT * FROM ${this.tableName} WHERE ${where} LIMIT ${limit}`
     else if (limit != null && limit > 0 && where != null && order != null)
-      sqlStatment = `SELECT * FROM ${this.tabelName} WHERE ${where} ORDER BY ${order.by} ${order.type} LIMIT ${limit}`
+      sqlStatment = `SELECT * FROM ${this.tableName} WHERE ${where} ORDER BY ${order.by} ${order.type} LIMIT ${limit}`
     else if (limit == null && where != null && order != null)
-      sqlStatment = `SELECT * FROM ${this.tabelName} WHERE ${where} ORDER BY ${order.by} ${order.type}`
+      sqlStatment = `SELECT * FROM ${this.tableName} WHERE ${where} ORDER BY ${order.by} ${order.type}`
     else if (limit == null && where == null && order != null)
-      sqlStatment = `SELECT * FROM ${this.tabelName} ORDER BY ${order.by} ${order.type}`
+      sqlStatment = `SELECT * FROM ${this.tableName} ORDER BY ${order.by} ${order.type}`
     else if (limit == null && where != null && order == null)
-      sqlStatment = `SELECT * FROM ${this.tabelName} WHERE ${where}`
+      sqlStatment = `SELECT * FROM ${this.tableName} WHERE ${where}`
 
     return new Promise((resolve, reject) => {
       try {
@@ -120,7 +207,7 @@ class Model {
             this.connect()
             this.connection.connect(connectionErr => {
               if (connectionErr) throw connectionErr;
-              this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
+              this.connection.query(`INSERT INTO ${this.tableName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
                 this.disconnect()
                 if (queryErr) throw queryErr;
                 resolve(0)
@@ -138,7 +225,7 @@ class Model {
           this.connect()
           this.connection.connect(connectionErr => {
             if (connectionErr) throw connectionErr;
-            this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
+            this.connection.query(`INSERT INTO ${this.tableName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
               this.disconnect()
               if (queryErr) throw queryErr;
               resolve(0)
@@ -156,7 +243,7 @@ class Model {
         this.connect()
         this.connection.connect(connectionErr => {
           if (connectionErr) throw connectionErr;
-          this.connection.query(`DELETE FROM ${this.tabelName} WHERE ${where}`, (queryErr) => {
+          this.connection.query(`DELETE FROM ${this.tableName} WHERE ${where}`, (queryErr) => {
             this.disconnect()
             if (queryErr) throw queryErr;
             resolve("Deleted")
@@ -175,7 +262,7 @@ class Model {
       cols.push(key)
       values.push(data[key])
     }
-    let sql = `UPDATE ${this.tabelName} SET`
+    let sql = `UPDATE ${this.tableName} SET`
     let final = cols.length - 1
     let counter = 0
     cols.forEach(col => {
