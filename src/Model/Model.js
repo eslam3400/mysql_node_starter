@@ -20,7 +20,7 @@ const Model = {
   config(options = { host: null, user: null, password: null, database: null }) {
     let { host, user, password, database } = options
     if (host == undefined || user == undefined || password == undefined || database == undefined)
-      console.error("Please make sure to provide all required options [host,username,password,database]")
+      console.warn("Please make sure to provide all required options [host,username,password,database]")
     else
       connection = db.createConnection({ host, user, password, database })
   },
@@ -40,7 +40,7 @@ const Model = {
    */
   excute(_sqlStatment) {
     if (tableName == null || tableName == undefined)
-      console.error("please make sure to use target() providing the tabel name as a parameter")
+      console.warn("please make sure to use target() providing the tabel name as a parameter")
     else
       return new Promise((resolve, reject) => {
         connection.query(_sqlStatment, (queryErr, result) => {
@@ -107,14 +107,14 @@ const Model = {
       });
       let checkData = await this.get({ where: uniqueValues })
       if (checkData.length == 0)
-        return this.excute(`INSERT INTO ${this.tableName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`)
+        return this.excute(`INSERT INTO ${tableName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`)
       else {
         console.log(`some information is already used before`)
         return null
       }
     }
     else
-      return this.excute(`INSERT INTO ${this.tableName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`)
+      return this.excute(`INSERT INTO ${tableName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`)
   },
   /**
    * delete a record/s from database table
@@ -122,7 +122,7 @@ const Model = {
    * @returns promise
    */
   delete(where) {
-    return this.excute(`DELETE FROM ${this.tableName} WHERE ${where}`)
+    return this.excute(`DELETE FROM ${tableName} WHERE ${where}`)
   },
   /**
    * update record/s in the database table based on the given condetion and data
@@ -138,7 +138,7 @@ const Model = {
       cols.push(key)
       values.push(data[key])
     }
-    let sqlStatment = `UPDATE ${this.tableName} SET`
+    let sqlStatment = `UPDATE ${tableName} SET`
     let final = cols.length - 1
     let counter = 0
     cols.forEach(col => {

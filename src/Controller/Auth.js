@@ -1,10 +1,10 @@
-const UserModel = require('../Model/User')
+const db = require('../Model/Model')
 const { createToken } = require('../Utilities/Utility')
 
 let loginPage = (req, res) => res.render('login', { msg: "" })
 
 let login = async (req, res) => {
-  let users = await new UserModel().get({ where: `email = '${req.body.email}' AND password = '${req.body.password}'` })
+  let users = await db.get({ where: `email = '${req.body.email}' AND password = '${req.body.password}'` })
   if (users.length == 1) return res.cookie('token', createToken(users[0].id)).redirect('/') // 8 hourse
   else return res.render('login', { msg: "loginError" })
 }

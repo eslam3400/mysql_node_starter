@@ -1,4 +1,5 @@
 const path = require('path')
+const db = require('./src/Model/Model')
 const express = require('express')
 const cookie = require('cookie-parser')
 const fileUpload = require("express-fileupload");
@@ -27,6 +28,10 @@ app.use(cookie("DevTik"))
  * by using this i can access files data from req.files object
  */
 app.use(fileUpload())
+/**
+ * Database Connection Configrations
+ */
+db.config({ host: 'localhost', user: 'root', password: '', database: 'test' })
 /**
  * Routers
  */
