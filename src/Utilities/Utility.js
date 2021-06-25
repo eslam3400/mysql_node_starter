@@ -1,8 +1,9 @@
 let { uploadPath } = require('../../uploadPath')
+const { exec } = require("child_process");
 const uuid = require('uuid').v4
 const jwt = require('jsonwebtoken')
-const TOKEN_SECRET = 'devtik'; // require('crypto').randomBytes(64).toString('hex')
 const bcrypt = require('bcrypt')
+const TOKEN_SECRET = 'devtik'; // require('crypto').randomBytes(64).toString('hex')
 const saltRounds = 10;
 
 let uploadFile = async file => {
@@ -45,6 +46,8 @@ let unhash = async (text, hashed) => await bcrypt.compare(text, hashed)
 
 let created_at = (date) => date.toString().substr(0, 15)
 
+let executeCommandLine = (command) => exec(command)
+
 module.exports = {
   uploadFile,
   uploadFiles,
@@ -53,5 +56,6 @@ module.exports = {
   createToken,
   created_at,
   hash,
-  unhash
+  unhash,
+  executeCommandLine
 }
