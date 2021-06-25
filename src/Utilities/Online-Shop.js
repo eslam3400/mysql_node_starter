@@ -1,7 +1,7 @@
-let calculateDiscount = (ad) => {
-  if (ad.discountType == 'percentage') ad.newPrice = (ad.price - (ad.price / 100) * ad.discount)
-  else if (ad.discountType == 'fixed') ad.newPrice = ad.price - ad.discount
-  else return ad
+let calculateDiscount = (product) => {
+  if (product.discountType == 'percentage') product.newPrice = (product.price - (product.price / 100) * product.discount)
+  else if (product.discountType == 'fixed') product.newPrice = product.price - product.discount
+  else return product
 }
 
 module.exports = { calculatePriceWithDiscount }
