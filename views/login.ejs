@@ -1,61 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/style.css" rel="stylesheet" />
-    <title>Login</title>
-  </head>
-  <body>
-    <nav class="navbar navbar-dark bg-dark">
-      <div class="container-fluid">
-        <span class="navbar-brand m-auto h1">Ejadah</span>
-      </div>
-    </nav>
-    <section class="mt-5 pt-5 mb-5 pb-5">
-      <form action="/login" method="POST" class="m-auto w-50 pt-5">
-        <% if (msg == "loginError") { %>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+  <title>Login</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+      <span class="navbar-brand m-auto h1">Ejadah</span>
+    </div>
+  </nav>
+  <section class="mt-5 pt-5 mb-5 pb-5">
+    <form action="/login" method="POST" class="m-auto w-50 pt-5">
+      <% if (msg=="loginError" ) { %>
         <div class="alert alert-danger" role="alert">
           Email Or Password Are Inccorect Please Try Again With Valid Data
         </div>
-        <% } %> <% if (msg == "authError") { %>
-        <div class="alert alert-danger" role="alert">
-          You Have To Login First To Access This Page
-        </div>
-        <% } %> <% if (msg == "accessError") { %>
-        <div class="alert alert-danger" role="alert">
-          You Don't Have The Permission To Access This Page
-        </div>
         <% } %>
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label"
-            >Email address</label
-          >
-          <input
-            type="email"
-            name="email"
-            class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input
-            type="password"
-            name="password"
-            class="form-control"
-            id="exampleInputPassword1"
-          />
-        </div>
-        <div class="d-grid gap-2 col-6 mx-auto pt-3">
-          <button type="submit" class="btn btn-primary" type="button">
-            Login
-          </button>
-        </div>
-      </form>
-    </section>
-    <script src="js/bootstrap.bundle.min.js"></script>
-  </body>
+          <% if (msg=="authError" ) { %>
+            <div class="alert alert-danger" role="alert">
+              You Have To Login First To Access This Page
+            </div>
+            <% } %>
+              <% if (msg=="accessError" ) { %>
+                <div class="alert alert-danger" role="alert">
+                  You Don't Have The Permission To Access This Page
+                </div>
+                <% } %>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Email address</label>
+                    <input type="text" name="username" class="form-control" id="exampleInputEmail1"
+                      aria-describedby="emailHelp" />
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" id="exampleInputPassword1" />
+                  </div>
+                  <div class="d-grid gap-2 col-6 mx-auto pt-3">
+                    <button type="submit" class="btn btn-primary" type="button">
+                      Login
+                    </button>
+                  </div>
+    </form>
+  </section>
+  <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+
 </html>

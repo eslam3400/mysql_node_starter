@@ -31,7 +31,7 @@ app.use(fileUpload())
 /**
  * Database Connection Configrations
  */
-db.config({ host: 'localhost', user: 'root', password: '', database: 'test' })
+db.config({ host: 'localhost', user: 'root', password: '', database: 'hr' })
 /**
  * Routers
  */

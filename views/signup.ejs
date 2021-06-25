@@ -1,63 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/style.css" rel="stylesheet" />
-    <title>Login</title>
-  </head>
-  <body>
-    <nav class="navbar navbar-dark bg-dark">
-      <div class="container-fluid">
-        <span class="navbar-brand m-auto h1">Ejadah</span>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+  <title>Login</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+      <span class="navbar-brand m-auto h1">Ejadah</span>
+    </div>
+  </nav>
+  <section class="mt-5 pt-5 mb-5 pb-5">
+    <form method="post" action="/signup" class="m-auto w-50 pt-5">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputEmail4">Email</label>
+          <input name="username" type="text" class="form-control" id="inputEmail4" />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputPassword4">Password</label>
+          <input name="password" type="password" class="form-control" id="inputPassword4" />
+        </div>
       </div>
-    </nav>
-    <section class="mt-5 pt-5 mb-5 pb-5">
-      <form method="post" action="/signup" class="m-auto w-50 pt-5">
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="inputEmail4">Email</label>
-            <input
-              name="email"
-              type="email"
-              class="form-control"
-              id="inputEmail4"
-            />
-          </div>
-          <div class="form-group col-md-6">
-            <label for="inputPassword4">Password</label>
-            <input
-              name="password"
-              type="password"
-              class="form-control"
-              id="inputPassword4"
-            />
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="inputAddress">First Name</label>
-          <input
-            name="fname"
-            type="text"
-            class="form-control"
-            id="inputAddress"
-            placeholder="1234 Main St"
-          />
-        </div>
-        <div class="form-group">
-          <label for="inputAddress2">Last Name</label>
-          <input
-            name="lname"
-            type="text"
-            class="form-control"
-            id="inputAddress2"
-            placeholder="Apartment, studio, or floor"
-          />
-        </div>
-        <button type="submit" class="btn btn-primary">Sign Up</button>
-      </form>
-    </section>
-    <script src="js/bootstrap.bundle.min.js"></script>
-  </body>
+      <div class="form-group">
+        <label for="inputAddress">First Name</label>
+        <input name="firstName" type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" />
+      </div>
+      <div class="form-group">
+        <label for="inputAddress2">Last Name</label>
+        <input name="lastName" type="text" class="form-control" id="inputAddress2"
+          placeholder="Apartment, studio, or floor" />
+      </div>
+      <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+  </section>
+  <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+
 </html>

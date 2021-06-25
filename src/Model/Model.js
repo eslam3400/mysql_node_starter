@@ -109,7 +109,7 @@ const Model = {
       if (checkData.length == 0)
         return this.excute(`INSERT INTO ${tableName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`)
       else {
-        console.log(`some information is already used before`)
+        console.warn(`some information is already used before`)
         return null
       }
     }

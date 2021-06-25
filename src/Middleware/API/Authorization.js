@@ -1,4 +1,4 @@
-const UserModel = require('../../Model/User')
+const UserModel = require('../../Model/Model')
 const { verifyToken } = require('../../Utilities/Utility')
 
 let auth = async (req, res, next) => {
