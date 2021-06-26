@@ -50,7 +50,6 @@ let created_at = (date) => date.toString().substr(0, 15)
 let executeCommandLine = (command) => exec(command)
 
 module.exports = {
-  uploadFile,
   uploadFiles,
   generateID,
   verifyToken,
