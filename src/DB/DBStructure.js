@@ -1,8 +1,8 @@
-const Model = require('../Model/Model')
+const db = require('../Model/Model')
 const sqls = []
 
 let buildDataBaseStructure = () => {
-  sqls.forEach(sql => new Model().excute(sql));
+  sqls.forEach(sql => db.target('db').excute(sql));
 }
 
 buildDataBaseStructure()
