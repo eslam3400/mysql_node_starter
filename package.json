@@ -7,7 +7,9 @@
     "start": "node server.js",
     "serve": "nodemon serve.js",
     "buildDB": "node ./src/DB/DBStructure.js",
-    "test": "node ./src/Test/test.js"
+    "test": "node ./src/Test/test.js",
+    "forever": "npm install pm2 -g",
+    "start-forever": "pm2 start server.js"
   },
   "keywords": [],
   "author": "Eslam Magdy",
