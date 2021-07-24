@@ -1,0 +1,11 @@
+{
+  "database": {
+    "host": "localhost",
+    "user": "root",
+    "password": "",
+    "database": "hr"
+  },
+  "upload_path": "F:workez libsjsNodeStart Template MySQL/public/uploads/",
+  "token_secret": "devtik",
+  "bcrypt_salt": "10"
+}

@@ -1,24 +1,28 @@
-const { uploadPath } = require('../../uploadPath')
+const config = require('../../config.json')
+const uploadPath = config.upload_path
 const { exec } = require("child_process");
 const uuid = require('uuid').v4
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const TOKEN_SECRET = 'devtik'; // require('crypto').randomBytes(64).toString('hex')
-const saltRounds = 10;
+const TOKEN_SECRET = config.token_secret; // require('crypto').randomBytes(64).toString('hex')
+const saltRounds = config.bcrypt_salt;
 
 let uploadFiles = async files => {
   if (files) {
     if (files.img.length > 1)
       return new Promise((resolve, reject) => {
         let imgs = files.img
-        imgs.forEach(img => {
+        let img_name = []
+        imgs.forEach(async img => {
           let fileExtention = img.mimetype
           fileExtention = fileExtention.slice(fileExtention.indexOf("/") + 1)
           img.name = new Date().getTime() + '.' + fileExtention
-          file.mv(uploadPath + img.name, err => {
+          await file.mv(uploadPath + img.name, err => {
             if (err) console.log(err)
+            else img_name.push(img.name)
           })
         });
+        resolve(img_name)
       })
     else {
       return new Promise((resolve, reject) => {

@@ -15,8 +15,10 @@ let signup = async (req, res) => {
 
 let userData = async (req, res) => {
   let users = await db.target('users').get({ where: `id = '${verifyToken(req.get('Token'))}'` })
-  if (users.length == 1) res.status(200).json(users[0])
-  else res.status(404).json({ err: `user not founded` })
+  if (users.length == 1) {
+    delete users[0].password
+    res.status(200).json(users[0])
+  } else res.status(404).json({ err: `user not founded` })
 }
 
 module.exports = { login, signup, userData }

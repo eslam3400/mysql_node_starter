@@ -17,35 +17,25 @@
   </nav>
   <section class="mt-5 pt-5 mb-5 pb-5">
     <form action="/login" method="POST" class="m-auto w-50 pt-5">
-      <% if (msg=="loginError" ) { %>
+      <% if (msg) { %>
         <div class="alert alert-danger" role="alert">
-          Email Or Password Are Inccorect Please Try Again With Valid Data
+          <%= msg %>
         </div>
         <% } %>
-          <% if (msg=="authError" ) { %>
-            <div class="alert alert-danger" role="alert">
-              You Have To Login First To Access This Page
-            </div>
-            <% } %>
-              <% if (msg=="accessError" ) { %>
-                <div class="alert alert-danger" role="alert">
-                  You Don't Have The Permission To Access This Page
-                </div>
-                <% } %>
-                  <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Email address</label>
-                    <input type="text" name="username" class="form-control" id="exampleInputEmail1"
-                      aria-describedby="emailHelp" />
-                  </div>
-                  <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" id="exampleInputPassword1" />
-                  </div>
-                  <div class="d-grid gap-2 col-6 mx-auto pt-3">
-                    <button type="submit" class="btn btn-primary" type="button">
-                      Login
-                    </button>
-                  </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="text" name="username" class="form-control" id="exampleInputEmail1"
+              aria-describedby="emailHelp" />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" id="exampleInputPassword1" />
+          </div>
+          <div class="d-grid gap-2 col-6 mx-auto pt-3">
+            <button type="submit" class="btn btn-primary" type="button">
+              Login
+            </button>
+          </div>
     </form>
   </section>
   <script src="js/bootstrap.bundle.min.js"></script>

@@ -4,13 +4,12 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
     "serve": "nodemon serve.js",
     "buildDB": "node ./src/DB/DBStructure.js",
     "test": "node ./src/Test/test.js",
     "forever": "npm install pm2 -g",
-    "start-forever": "pm2 start server.js",
-    "restart-forever": "pm2 reload all"
+    "start": "pm2 start server.js",
+    "restart": "pm2 reload all"
   },
   "keywords": [],
   "author": "Eslam Magdy",

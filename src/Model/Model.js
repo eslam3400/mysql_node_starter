@@ -1,4 +1,5 @@
 const db = require('mysql');
+const config = require('../../config.json')
 /**
  * tabel name that we work on to fetch or send data
  */
@@ -64,11 +65,11 @@ const Model = {
 
     if (limit == null && where == null && order == null)
       sqlStatment = `SELECT * FROM ${tableName}`
-    else if (limit != null && limit > 0 && where == null && order == null)
+    else if (limit != null && where == null && order == null)
       sqlStatment = `SELECT * FROM ${tableName} LIMIT ${limit}`
-    else if (limit != null && limit > 0 && where != null && order == null)
+    else if (limit != null && where != null && order == null)
       sqlStatment = `SELECT * FROM ${tableName} WHERE ${where} LIMIT ${limit}`
-    else if (limit != null && limit > 0 && where != null && order != null)
+    else if (limit != null && where != null && order != null)
       sqlStatment = `SELECT * FROM ${tableName} WHERE ${where} ORDER BY ${order.by} ${order.type} LIMIT ${limit}`
     else if (limit == null && where != null && order != null)
       sqlStatment = `SELECT * FROM ${tableName} WHERE ${where} ORDER BY ${order.by} ${order.type}`
@@ -152,5 +153,7 @@ const Model = {
     return this.excute(sqlStatment)
   }
 }
+
+Model.config(config.database)
 
 module.exports = Model;

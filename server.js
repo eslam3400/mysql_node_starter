@@ -29,10 +29,6 @@ app.use(cookie("DevTik"))
  */
 app.use(fileUpload())
 /**
- * Database Connection Configrations
- */
-db.config({ host: 'localhost', user: 'root', password: '', database: 'hr' })
-/**
  * Routers
  */
 app.use("/API/", APIRouter)
