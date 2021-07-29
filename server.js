@@ -19,7 +19,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 /**
  * by using this i can access data from post reqest with the body object
  */
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: false }))
+/**
+ * by using this i can access data from reqest in row format (data in json format) within the body object
+ */
+// app.use(express.json())
 /**
  * by using this i can access cookies data from cookies object
  */
