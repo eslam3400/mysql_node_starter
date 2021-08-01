@@ -94,7 +94,7 @@ const Model = {
     let values = []
     for (const key in data) {
       cols.push(key)
-      values.push(data[key])
+      values.push(connection.escape(data[key]))
     }
     if (unique[0] != null) {
       let uniqueValues = ``
@@ -137,7 +137,7 @@ const Model = {
     let values = []
     for (const key in data) {
       cols.push(key)
-      values.push(data[key])
+      values.push(connection.escape(data[key]))
     }
     let sqlStatment = `UPDATE ${tableName} SET`
     let final = cols.length - 1
