@@ -5,7 +5,7 @@ const uuid = require('uuid').v4
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const TOKEN_SECRET = config.token_secret; // require('crypto').randomBytes(64).toString('hex')
-const saltRounds = config.bcrypt_salt;
+const saltRounds = parseInt(config.bcrypt_salt);
 
 let uploadFiles = async files => {
   if (files) {
