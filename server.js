@@ -37,5 +37,6 @@ app.use(fileUpload())
  */
 app.use("/API/", APIRouter)
 app.use("/", WebRouter)
+app.all("*", (req, res) => res.send("404"))
 
 app.listen(process.env.PORT || port, () => console.log(`app listening at http://localhost:${port}`))
