@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "nodemon serve.js",
     "buildDB": "node ./src/DB/DBStructure.js",
-    "test": "node ./src/Test/test.js",
+    "test": "jest",
     "forever": "npm install pm2 -g",
     "start": "pm2 start server.js",
     "restart": "pm2 reload all"
@@ -23,5 +23,8 @@
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "jest": "^27.0.6"
   }
 }
